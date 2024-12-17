@@ -192,4 +192,12 @@ To install and set up **Flyway** for use with an Oracle Database, follow these s
 
 Let me know if you need help with any specific part!
 
-This guide will help you set up your Oracle database in a Docker container, generate fake data, and load it into the database for testing or development purposes.
+
+================================================================
+
+
+My goal is todo the following: 
+
+1. I need to pull down docker image genzvel/oracle-free, load in two csv files that are locally stored on my computer. I have a create_fake_data1.sql file and fake_data1.csv file
+2. I then need to edit the docker cotainer so that the oracle database has  flyway installed on it with the correct schema.  
+3. I then need to use kind to create and load that oracle img that I just created into kind but I need to do this will terraform. 

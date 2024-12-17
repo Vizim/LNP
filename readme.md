@@ -1,5 +1,3 @@
-
-
 # **POC for Flyway with Oracle Database in Docker**
 
 ### **Step 1: Pull the Oracle Docker Image & Do First Time Config**
@@ -385,3 +383,104 @@ This will stop the containers and remove any volumes (including the Oracle datab
 - If you're using a custom database user for Flyway migrations or data injection, ensure that the appropriate permissions are granted.
 
 ---
+
+The error persists because of **large image size issues** or **digest resolution failures** with `ctr` in the Kind cluster. Since the direct `kind load` or `image-archive` method failed, we need a workaround.
+
+Let’s manually load the image **directly into the Kind container’s containerd runtime** as a fallback solution.
+
+---
+
+## Step-by-Step Manual Image Loading Because Apprently Kind Can't do big files
+
+### **1. Copy the Tarball into the Kind Node **
+Run the following command to copy the tarball into the Kind control-plane node:
+
+```bash
+docker cp oracle-free.tar k8-control-plane:/oracle-free.tar
+```
+
+---
+
+### **2. Load the Image into containerd Manually**
+
+Exec into the Kind node container:
+
+```bash
+docker exec -it k8-control-plane bash
+```
+
+Once inside the node container, load the image into containerd using the **`ctr`** command:
+
+```bash
+ctr --namespace k8s.io images import /oracle-free.tar
+```
+
+This directly imports the image into containerd, bypassing the `kind load` tooling.
+
+---
+
+### **3. Verify the Image Is Loaded**
+
+Inside the Kind node, verify the image was loaded successfully:
+
+```bash
+ctr --namespace k8s.io images list
+```
+
+You should see `gvenzl/oracle-free:latest` in the output.
+
+---
+
+### **4. Exit the Node and Test the Image**
+
+Exit the Kind node container:
+
+```bash
+exit
+```
+
+On your local machine, create a Kubernetes pod to confirm the image works:
+
+```bash
+kubectl run oracle-test --image=gvenzl/oracle-free:latest --restart=Never
+```
+
+Check the pod status:
+
+```bash
+kubectl get pods
+```
+
+---
+
+## Why This Works
+
+- By manually copying the image tarball and importing it with `ctr`, we bypass any inconsistencies or bugs in `kind load`.
+- This method works reliably for large images or images with problematic digests.
+
+---
+
+## Summary of Commands
+
+1. Copy the tarball to the Kind node:
+
+   ```bash
+   docker cp oracle-free.tar k8-control-plane:/oracle-free.tar
+   ```
+
+2. Load the image into containerd:
+
+   ```bash
+   docker exec -it k8-control-plane bash
+   ctr --namespace k8s.io images import /oracle-free.tar
+   ```
+
+3. Verify and test:
+
+   ```bash
+   kubectl run oracle-test --image=gvenzl/oracle-free:latest --restart=Never
+   kubectl get pods
+   ```
+
+---
+

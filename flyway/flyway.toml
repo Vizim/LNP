@@ -1,0 +1,82 @@
+databaseType = "Oracle"
+id = "27524589-1b0d-4727-b136-2aa3b9258edc"
+name = "flyway"
+
+[flyway]
+locations = [ "filesystem:migrations" ]
+mixed = true
+outOfOrder = true
+schemaModelLocation = "schema-model"
+validateMigrationNaming = true
+
+[flyway.check]
+majorTolerance = 0
+
+[flywayDesktop]
+developmentEnvironment = "development"
+shadowEnvironment = "shadow"
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.oracle]
+filterFile = "Filter.scpf"
+ignoreRulesFile = "IgnoreRules.scpf"
+
+[redgateCompare.oracle.data.options.comparison]
+checkTablesForData = false
+databaseTimeZone = ""
+ignoreControlCharacters = false
+ignoreDateTypeDifferences = false
+ignoreWhiteSpace = false
+includeSourceTables = true
+includeViews = false
+trimTrailingSpaces = false
+
+[redgateCompare.oracle.options.behavior]
+addPurgeClauseToAllTableDrops = false
+detectRenamedColumns = true
+excludeSchemaNames = false
+forceColumnOrder = false
+includeCrossSchemaPermissions = true
+includeProgramUnitRoles = false
+includeSetBlankLinesOn = false
+includeSetDefineOff = true
+includeSetDefineOffToScripter = true
+includeSystemPermissions = false
+includeUserRoles = false
+suppressDependentAlterCompile = false
+useForwardSlash = false
+
+[redgateCompare.oracle.options.ignores]
+ignoreCaseDifferencesInPlSqlBlocks = false
+ignoreCommentsInPlSqlBlocks = false
+ignoreCommentsOnTablesViewsAndColumns = false
+ignoreConstraintNames = false
+ignoreDependentObjectsInOtherSchemas = true
+ignoreDoubleQuotesInPlSqlBlocks = true
+ignoreExternalTableLocationInformation = false
+ignoreIndexNames = false
+ignoreLengthSemantics = false
+ignoreLobStorage = false
+ignoreMaterializedViewStartWithValue = true
+ignoreParallel = false
+ignorePermissions = true
+ignoreSequenceCurrentValue = true
+ignoreSlowDependencies = true
+ignoreSupplementalLogGroups = false
+ignoreSystemPartitions = false
+ignoreWhitespace = true
+
+[redgateCompare.oracle.options.storage]
+includeAllStorage = false
+includeStorageCompression = false
+includeStorageDeferredSegments = false
+includeStorageExtents = false
+includeStorageIlmPolicies = false
+includeStorageIniTrans = false
+includeStorageLobsAndVarrays = false
+includeStorageLogging = false
+includeStoragePartitioning = false
+includeStoragePctFree = false
+includeStorageTablespace = false
